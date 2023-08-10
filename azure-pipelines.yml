@@ -17,6 +17,9 @@ stages:
         pip install -r $(System.DefaultWorkingDirectory)/evaluation/requirements.txt
         python $(System.DefaultWorkingDirectory)/evaluation/setup.py sdist
       displayName: 'Install dependencies, package, and archive'
+    - script: |
+        mkdir -p $(System.DefaultWorkingDirectory)/evaluation/dist
+      displayName: 'Create dist directory'
     - task: PublishPipelineArtifact@1
       inputs:
         artifactName: 'drop'
