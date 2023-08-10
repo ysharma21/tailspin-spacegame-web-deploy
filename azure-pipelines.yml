@@ -16,7 +16,10 @@ stages:
         source env/bin/activate
         pip install -r $(System.DefaultWorkingDirectory)/evaluation/requirements.txt
         python $(System.DefaultWorkingDirectory)/evaluation/setup.py sdist
-      displayName: 'Install dependencies and package'
+        mkdir $(System.DefaultWorkingDirectory)/evaluation/dist
+        mv $(System.DefaultWorkingDirectory)/evaluation/dist/*.tar.gz $(System.DefaultWorkingDirectory)/evaluation/dist/evaluation.tar.gz
+        echo '##vso[task.uploadfile]$(System.DefaultWorkingDirectory)/evaluation/dist/evaluation.tar.gz'
+      displayName: 'Install dependencies, package, and archive'
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
@@ -27,22 +30,29 @@ stages:
       displayName: 'Archive files'
 
 - stage: Test
-  displayName: 'Test'
+  displayName: 'Test the Evaluation package'
   jobs:
-  - job: UnitTest
-    displayName: 'Unit test'
+  - job: Test
+    displayName: 'Test the Evaluation package'
     steps:
-    - task: ExtractFiles@1
+    - task: DownloadPipelineArtifact@2
       inputs:
-        archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar.gz'
-        destinationFolder: '$(System.DefaultWorkingDirectory)'
-      displayName: 'Extract files'
+        artifactName: 'drop'
+        downloadPath: '$(System.DefaultWorkingDirectory)/evaluation/dist'
+        itemPattern: '**/*.tar.gz'
+      displayName: 'Download package artifact'
     - script: |
         python -m venv env
         source env/bin/activate
-        pip install -r requirements.txt
-        python -m unittest discover tests/
-      displayName: 'Run unit tests'
+        pip install $(System.DefaultWorkingDirectory)/evaluation/dist/evaluation.tar.gz
+        python test_evaluation.py
+      displayName: 'Install package and run tests'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '$(System.DefaultWorkingDirectory)/test-results/*.xml'
+        failTaskOnFailedTests: true
+      displayName: 'Publish test results'
 
 - stage: DeployOpenAI
   displayName: 'Deploy OpenAI service'
