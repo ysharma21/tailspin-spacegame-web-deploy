@@ -20,6 +20,7 @@ stages:
         pip install -r $(System.DefaultWorkingDirectory)/evaluation/requirements.txt
         pip install wheel
         python $(System.DefaultWorkingDirectory)/evaluation/setup.py sdist bdist_wheel
+        echo 'Contents of $(System.DefaultWorkingDirectory)/evaluation/dist:'
         ls $(System.DefaultWorkingDirectory)/evaluation/dist
       displayName: 'Install dependencies, package, and list contents'
     - task: PublishPipelineArtifact@1
