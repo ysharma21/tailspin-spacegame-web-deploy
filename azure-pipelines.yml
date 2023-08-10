@@ -41,7 +41,7 @@ stages:
     - script: |
         python -m venv env
         source env/bin/activate
-        pip install $(System.DefaultWorkingDirectory)/evaluation/dist/evaluation.tar.gz
+        pip install $(System.DefaultWorkingDirectory)/evaluation/dist/evaluation-0.1.tar.gz
         python test_evaluation.py
       displayName: 'Install package and run tests'
     - task: PublishTestResults@2
