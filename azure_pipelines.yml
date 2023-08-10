@@ -1,0 +1,60 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: 'Build the Evaluation package'
+  jobs:
+  - job: Build
+    displayName: 'Build the Evaluation package'
+    steps:
+    - script: |
+        python -m venv env
+        source env/bin/activate
+        pip install -r ../evaluation/requirements.txt
+        python setup.py sdist
+      displayName: 'Install dependencies and package'
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+      displayName: 'Archive files'
+
+- stage: Test
+  displayName: 'Test'
+  jobs:
+  - job: UnitTest
+    displayName: 'Unit test'
+    steps:
+    - task: ExtractFiles@1
+      inputs:
+        archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        destinationFolder: '$(System.DefaultWorkingDirectory)'
+      displayName: 'Extract files'
+    - script: |
+        python -m venv env
+        source env/bin/activate
+        pip install -r requirements.txt
+        python -m unittest discover tests/
+      displayName: 'Run unit tests'
+
+- stage: DeployOpenAI
+  displayName: 'Deploy OpenAI service'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy OpenAI service'
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(subscriptionName)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment group create --resource-group '$(resourceGroupName)' --template-file '$(ARMTemplateFileName)' --parameters subscriptionId='$(subscriptionId)' location='$(location)' openaiName='$(openAIdeploymentName)' openaiSku='$(openAISku)'
+      displayName: 'Deploy OpenAI service'
