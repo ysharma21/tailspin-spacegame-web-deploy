@@ -16,8 +16,8 @@ stages:
         source env/bin/activate
         pip install -r $(System.DefaultWorkingDirectory)/evaluation/requirements.txt
         python $(System.DefaultWorkingDirectory)/evaluation/setup.py sdist
-        mkdir $(System.DefaultWorkingDirectory)/evaluation/dist
-        mv $(System.DefaultWorkingDirectory)/evaluation/dist/*.tar.gz $(System.DefaultWorkingDirectory)/evaluation/dist/evaluation.tar.gz
+        mkdir $(System.DefaultWorkingDirectory)/dist
+        mv $(System.DefaultWorkingDirectory)/evaluation/dist/*.tar.gz $(System.DefaultWorkingDirectory)/dist/evaluation.tar.gz
         echo '##vso[task.uploadfile]$(System.DefaultWorkingDirectory)/evaluation/dist/evaluation.tar.gz'
       displayName: 'Install dependencies, package, and archive'
     - task: ArchiveFiles@2
