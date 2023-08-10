@@ -17,14 +17,6 @@ stages:
         pip install -r $(System.DefaultWorkingDirectory)/evaluation/requirements.txt
         python $(System.DefaultWorkingDirectory)/evaluation/setup.py sdist
       displayName: 'Install dependencies, package, and archive'
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: 'tar.gz'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar.gz'
-        replaceExistingArchive: true
-      displayName: 'Archive files'
 
 - stage: Test
   displayName: 'Test the Evaluation package'
