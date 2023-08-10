@@ -36,7 +36,6 @@ stages:
       inputs:
         artifactName: 'drop'
         downloadPath: '$(System.DefaultWorkingDirectory)/evaluation/dist'
-        itemPattern: '**/*.tar.gz'
       displayName: 'Download package artifact'
     - script: |
         python -m venv env
