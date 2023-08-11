@@ -47,7 +47,7 @@ stages:
     - script: |
         python -m venv env
         source env/bin/activate
-        python test_evaluation.py
+        python $(System.DefaultWorkingDirectory)/evaluation/test_evaluation.py
       displayName: 'Install package and run tests'
     - task: PublishTestResults@2
       inputs:
