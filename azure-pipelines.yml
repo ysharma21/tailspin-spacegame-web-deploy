@@ -3,22 +3,18 @@ parameters:
   type: string
   default: 'f3365460-b265-4b58-b696-2d5c99a6235f'
   displayName: 'Azure Subscription ID'
-  description: 'The ID of the Azure subscription to deploy the OpenAI service to.'
 - name: location
   type: string
   default: 'East US'
   displayName: 'Azure Region'
-  description: 'The Azure region to deploy the OpenAI service to.'
 - name: openAIdeploymentName
   type: string
   default: 'testado'
   displayName: 'OpenAI Service Name'
-  description: 'The name of the OpenAI service to create.'
 - name: openAISku
   type: string
   default: 'S0'
   displayName: 'OpenAI SKU'
-  description: 'The SKU of the OpenAI service to create.'
 
 trigger:
 - main
