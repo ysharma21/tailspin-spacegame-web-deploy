@@ -23,6 +23,11 @@ stages:
         echo 'Contents of $(System.DefaultWorkingDirectory)/evaluation/dist:'
         ls $(System.DefaultWorkingDirectory)/evaluation/dist
       displayName: 'Install dependencies, package, and list contents'
+
+    - task: CopyFiles@2
+      inputs:
+        contents: $(System.DefaultWorkingDirectory)/evaluation/**
+        targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishPipelineArtifact@1
       inputs:
         artifactName: 'drop'
