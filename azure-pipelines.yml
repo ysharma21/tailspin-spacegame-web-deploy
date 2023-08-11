@@ -28,11 +28,10 @@ stages:
       inputs:
         contents: $(System.DefaultWorkingDirectory)/evaluation/**
         targetFolder: $(Build.ArtifactStagingDirectory)
-    - task: PublishPipelineArtifact@1
+    - task: PublishBuildArtifacts@1
       inputs:
-        artifactName: 'drop'
-        targetPath: '$(System.DefaultWorkingDirectory)/evaluation/dist'
-      displayName: 'Publish package artifact'
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: drop
 
 - stage: Test
   displayName: 'Test the Evaluation package'
@@ -43,12 +42,11 @@ stages:
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: 'drop'
-        downloadPath: '$(System.DefaultWorkingDirectory)/evaluation/dist'
+        downloadPath: $(Build.ArtifactStagingDirectory)
       displayName: 'Download package artifact'
     - script: |
         python -m venv env
         source env/bin/activate
-        pip install $(System.DefaultWorkingDirectory)/evaluation/dist/evaluation-0.1.tar.gz
         python test_evaluation.py
       displayName: 'Install package and run tests'
     - task: PublishTestResults@2
