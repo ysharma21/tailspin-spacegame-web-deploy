@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "accounts_ys_testA_openai_name": {
-            "defaultValue": "ys-testA-openai",
+            "defaultValue": "ys-testB-openai",
             "type": "String"
         }
     },
@@ -12,14 +12,14 @@
         {
             "type": "Microsoft.CognitiveServices/accounts",
             "apiVersion": "2023-05-01",
-            "name": "[parameters('accounts_ys_testA_openai_name')]",
+            "name": "[parameters('accounts_ys_testB_openai_name')]",
             "location": "eastus2",
             "sku": {
                 "name": "S0"
             },
             "kind": "OpenAI",
             "properties": {
-                "customSubDomainName": "[parameters('accounts_ys_testA_openai_name')]",
+                "customSubDomainName": "[parameters('accounts_ys_testB_openai_name')]",
                 "networkAcls": {
                     "defaultAction": "Allow",
                     "virtualNetworkRules": [],
@@ -31,9 +31,9 @@
         {
             "type": "Microsoft.CognitiveServices/accounts/deployments",
             "apiVersion": "2023-05-01",
-            "name": "[concat(parameters('accounts_ys_testA_openai_name'), '/ys-gpt-35-turbo')]",
+            "name": "[concat(parameters('accounts_ys_testB_openai_name'), '/ys-gpt-35-turbo')]",
             "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_ys_testA_openai_name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_ys_testB_openai_name'))]"
             ],
             "sku": {
                 "name": "Standard",
