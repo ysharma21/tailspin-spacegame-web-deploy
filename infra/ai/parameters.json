@@ -1,0 +1,11 @@
+{
+    "openaiName": {
+      "value": "my-openai-resource"
+    },
+    "openaiSku": {
+      "value": "S0"
+    },
+    "location": {
+      "value": "East US"
+    }
+  }
