@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "subscriptionId": {
+        "type": "string",
+        "metadata": {
+          "description": "The subscription ID that the OpenAI service should be deployed to."
+        }
+      },
+      "location": {
+        "type": "string",
+        "metadata": {
+          "description": "The location that the OpenAI service should be deployed to."
+        }
+      },
+      "openaiName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the OpenAI service to create."
+        }
+      },
+      "openaiSku": {
+        "type": "string",
+        "metadata": {
+          "description": "The SKU of the OpenAI service to create."
+        }
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.CognitiveServices/accounts",
+        "name": "[parameters('openaiName')]",
+        "apiVersion": "2017-04-18",
+        "location": "[parameters('location')]",
+        "sku": {
+          "name": "[parameters('openaiSku')]"
+        },
+        "kind": "TextAnalytics",
+        "properties": {
+          "apiProperties": {
+            "publicNetworkAccess": "Enabled"
+          }
+        }
+      }
+    ],
+    "outputs": {
+      "openaiEndpoint": {
+        "type": "string",
+        "value": "[concat('https://', parameters('openaiName'), '.cognitiveservices.azure.com/')]"
+      }
+    }
+  }
