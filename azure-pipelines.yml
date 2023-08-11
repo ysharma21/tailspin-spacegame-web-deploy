@@ -87,5 +87,5 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az deployment group create --resource-group 'rg-openai_steam-dev' --template-file '$(System.DefaultWorkingDirectory)/deployment_ARM_template.json' --parameters subscriptionId='$(subscriptionId)' location='$(location)' openaiName='$(openAIdeploymentName)' openaiSku='$(openAISku)'
+          az deployment group create --resource-group 'rg-openai_steam-dev' --template-file '$(System.DefaultWorkingDirectory)/deployment_ARM_template.json' --parameters subscriptionId='$(subscriptionId)' location='East US' openaiName='$(openAIdeploymentName)' openaiSku='$(openAISku)'
       displayName: 'Deploy OpenAI service'
