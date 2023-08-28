@@ -81,20 +81,20 @@ stages:
 
 
 
-- stage: DeployOpenAI
-  displayName: 'Deploy OpenAI service'
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy OpenAI service'
-    steps:
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: '$(subscriptionName)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az deployment group create --resource-group 'rg-openai-dev' --template-file '$(System.DefaultWorkingDirectory)/infra/ai/arm_template.json' 
-      displayName: 'Deploy OpenAI service'
+# - stage: DeployOpenAI
+#   displayName: 'Deploy OpenAI service'
+#   jobs:
+#   - job: Deploy
+#     displayName: 'Deploy OpenAI service'
+#     steps:
+#     - task: AzureCLI@2
+#       inputs:
+#         azureSubscription: '$(subscriptionName)'
+#         scriptType: 'bash'
+#         scriptLocation: 'inlineScript'
+#         inlineScript: |
+#           az deployment group create --resource-group 'rg-openai-dev' --template-file '$(System.DefaultWorkingDirectory)/infra/ai/arm_template.json' 
+#       displayName: 'Deploy OpenAI service'
 
 - stage: DeployAppSvc
   displayName: 'Deploy Flask App service'
