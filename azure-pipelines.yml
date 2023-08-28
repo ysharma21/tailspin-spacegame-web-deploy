@@ -96,9 +96,10 @@ stages:
           az deployment group create --resource-group 'rg-openai-dev' --template-file '$(System.DefaultWorkingDirectory)/infra/ai/arm_template.json' 
       displayName: 'Deploy OpenAI service'
 
-- stage: DeployAppService
+- stage: DeployAppSvc
   displayName: 'Deploy Flask App service'
-  - job: App_Service_Deploy
+  jobs:
+  - job: DeployApp
     displayName: 'Deploy App service'
     steps:
     - task: UsePythonVersion@0
