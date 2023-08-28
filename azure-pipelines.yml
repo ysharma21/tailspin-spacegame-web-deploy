@@ -109,7 +109,7 @@ stages:
     - script: |
         python -m venv venv
         source venv/bin/activate
-        pip install -r $(System.DefaultWorkingDirectory)/demo_app/app/requirements.txt
+        pip install -r $(System.DefaultWorkingDirectory)/demo_app/requirements.txt
       displayName: 'Install dependencies'
 
     - task: ArchiveFiles@2
