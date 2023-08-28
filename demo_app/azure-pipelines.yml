@@ -8,7 +8,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureSubscription: '<your-subscription-name>'
+  azureSubscription: '$(subscriptionName)'
   appName: 'service-selector'
   resourceGroupName: 'rg-service-selector-dev'
   packagePath: '$(Pipeline.Workspace)/drop'
