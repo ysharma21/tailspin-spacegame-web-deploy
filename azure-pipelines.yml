@@ -17,7 +17,7 @@ parameters:
   displayName: 'OpenAI SKU'
 
 trigger:
-- main
+- flask_deploy
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -75,6 +75,8 @@ stages:
         failTaskOnFailedTests: true
       displayName: 'Publish test results'
 
+
+
 - stage: DeployOpenAI
   displayName: 'Deploy OpenAI service'
   jobs:
@@ -89,3 +91,42 @@ stages:
         inlineScript: |
           az deployment group create --resource-group 'rg-openai-dev' --template-file '$(System.DefaultWorkingDirectory)/infra/ai/arm_template.json' 
       displayName: 'Deploy OpenAI service'
+
+- stage: DeployAppService
+  displayName: 'Deploy Flask App service'
+
+  variables:
+  azureSubscription: '$(subscriptionName)'
+  appName: 'service-selector'
+  resourceGroupName: 'rg-service-selector-dev'
+  packagePath: '$(Pipeline.Workspace)/drop'
+
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.11'
+      displayName: 'Set up Python'
+
+    - script: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r demo_app/app/requirements.txt
+      displayName: 'Install dependencies'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+      displayName: 'Archive files'
+
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(appName)
+        package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        resourceGroupName: $(resourceGroupName)
+        runtimeStack: 'PYTHON|3.8'
+      startUpCommand: 'cd demo_app/app && gunicorn --bind=0.0.0.0 --timeout 600 app:app'
