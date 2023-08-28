@@ -124,7 +124,7 @@ stages:
     - task: AzureWebApp@1
       inputs:
         azureSubscription: '$(subscriptionName)'
-        appName: 'flask-test-app'
+        appName: 'tailspin-space-game-web-dev-5120'
         package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         resourceGroupName: 'tailspin-space-game-rg'
         runtimeStack: 'PYTHON|3.8'
