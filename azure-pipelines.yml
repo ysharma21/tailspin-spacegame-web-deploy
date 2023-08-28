@@ -124,8 +124,8 @@ stages:
     - task: AzureWebApp@1
       inputs:
         azureSubscription: '$(subscriptionName)'
-        appName: $(appName)
+        appName: 'flask-test-app'
         package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-        resourceGroupName: $(resourceGroupName)
+        resourceGroupName: 'tailspin-space-game-rg'
         runtimeStack: 'PYTHON|3.8'
         startUpCommand: 'cd demo_app/app && gunicorn --bind=0.0.0.0 --timeout 600 app:app'
