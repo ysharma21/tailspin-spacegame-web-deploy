@@ -105,7 +105,6 @@ stages:
       inputs:
         versionSpec: '3.11'
       displayName: 'Set up Python'
-
     - script: |
         python -m venv venv
         source venv/bin/activate
