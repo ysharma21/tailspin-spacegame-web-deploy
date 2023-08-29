@@ -107,9 +107,11 @@ stages:
         versionSpec: '3.11'
       displayName: 'Set up Python'
     - script: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install -r $(System.DefaultWorkingDirectory)/demo_app/requirements.txt
+        cd demo_app
+        python -m venv antenv
+        source antenv/bin/activate
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
       displayName: 'Install dependencies'
 
     - task: ArchiveFiles@2
@@ -123,9 +125,9 @@ stages:
 
     - task: AzureWebApp@1
       inputs:
-        azureSubscription: '$(subscriptionName)'
+        azureSubscription: 'Resource Manager - Tailspin - Space Game'
         appName: 'tailspin-space-game-web-dev-5120'
         package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         resourceGroupName: 'tailspin-space-game-rg'
-        runtimeStack: 'PYTHON|3.8'
-        startUpCommand: 'cd demo_app && gunicorn --bind=0.0.0.0 --timeout 600 app:app'
+        runtimeStack: 'PYTHON|3.11'
+        startUpCommand: 'gunicorn --bind=0.0.0.0 --workers=4 startup:app'
